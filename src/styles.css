@@ -1,0 +1,54 @@
+/* styles.css */
+
+/* Body styles */
+body {
+  background-color: #f0f4f7; /* Light blue background */
+  font-family: Arial, sans-serif;
+}
+
+/* Container styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin-top: -16px;
+}
+
+/* Heading styles */
+h1 {
+  font-size: 2rem;
+  margin: 20px 0;
+  color: #333; /* Dark text color */
+}
+
+/* Button styles */
+.button {
+  font-weight: bold;
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Yes button styles */
+.yes-button {
+  background-color: #007bff; /* Blue button color */
+  color: #fff; /* White text color */
+}
+
+.yes-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* No button styles */
+.no-button {
+  background-color: #dc3545; /* Red button color */
+  color: #fff; /* White text color */
+}
+
+.no-button:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
