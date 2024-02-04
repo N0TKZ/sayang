@@ -17,6 +17,8 @@
     "@types/react-dom": "^18.0.0"
   },
   "scripts": {
+   "predeploy": "npm run build",
+    "deploy": "main -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
