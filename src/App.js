@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './styles.css'; // Import the CSS file
 
@@ -6,17 +6,18 @@ export default function Page() {
   const [noCount, setNoCount] = useState(0);
   const [yesPressed, setYesPressed] = useState(false);
   const [deviceType, setDeviceType] = useState('');
+  const [ipAddress, setIpAddress] = useState('');
 
   const yesButtonSize = noCount * 20 + 16;
 
   const handleNoClick = () => {
     setNoCount(noCount + 1);
-    sendMessageToWebhook('No');
+    sendMessageToTelegramBot('No');
   };
 
   const handleYesClick = () => {
     setYesPressed(true);
-    sendMessageToWebhook('Yes');
+    sendMessageToTelegramBot('Yes');
   };
 
   const getDeviceType = () => {
@@ -54,20 +55,34 @@ export default function Page() {
     return phrases[Math.min(noCount, phrases.length - 1)];
   };
 
-  const sendMessageToWebhook = async (answer) => {
-    const webhookUrl = 'https://discord.com/api/webhooks/1203358083829600366/J5P9c2ieUJARNXamuENc8LGC7zifyu9VG41X-6OmynrBfGjFjGKnPcHE8KnN1iItfHDp';
-    try {
-      const deviceType = getDeviceType();
-      setDeviceType(deviceType);
+  const sendMessageToTelegramBot = async (answer) => {
+    const botToken = '6751658476:AAH17_DhTGmOHb3DHjFRe5L-AeEc8ryfcUY';
+    const chatId = '818897776';
+    const now = new Date();
+    const dateTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+    const message = `Someone answered "${answer}" to "Will you be mine?"\nDevice Type: ${getDeviceType()}\nDate/Time: ${dateTime}\nIP Address: ${ipAddress}`;
 
-      await axios.post(webhookUrl, {
-        content: `Someone answered "${answer}" to "Will you be mine?"\n \nDevice Type: ${deviceType}`
+    try {
+      await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        chat_id: chatId,
+        text: message
       });
       console.log('Message sent successfully');
     } catch (error) {
-      console.error('Error sending message to webhook:', error);
+      console.error('Error sending message to Telegram bot:', error);
     }
   };
+
+  useEffect(() => {
+    // Fetch user IP address when component mounts
+    axios.get('https://api.ipify.org?format=json')
+      .then(response => {
+        setIpAddress(response.data.ip);
+      })
+      .catch(error => {
+        console.error('Error fetching IP address:', error);
+      });
+  }, []);
 
   return (
     <div className="container">
