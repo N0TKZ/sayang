@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/sayang/static/css/main.1d74a5dc.css",
-    "main.js": "/sayang/static/js/main.1e9616d1.js",
+    "main.js": "/sayang/static/js/main.508535d4.js",
     "static/js/592.642694fc.chunk.js": "/sayang/static/js/592.642694fc.chunk.js",
     "index.html": "/sayang/index.html",
     "main.1d74a5dc.css.map": "/sayang/static/css/main.1d74a5dc.css.map",
-    "main.1e9616d1.js.map": "/sayang/static/js/main.1e9616d1.js.map",
+    "main.508535d4.js.map": "/sayang/static/js/main.508535d4.js.map",
     "592.642694fc.chunk.js.map": "/sayang/static/js/592.642694fc.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1d74a5dc.css",
-    "static/js/main.1e9616d1.js"
+    "static/js/main.508535d4.js"
   ]
 }
