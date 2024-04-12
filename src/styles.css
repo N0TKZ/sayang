@@ -52,3 +52,19 @@ h1 {
 .no-button:hover {
   background-color: #c82333; /* Darker red on hover */
 }
+
+/* Purple button styles */
+.purple-button {
+  background-color: #800080; /* Purple button color */
+  color: #fff; /* White text color */
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px; /* Add margin to create space below */
+}
+
+.purple-button:hover {
+  background-color: #6a006a; /* Darker purple on hover */
+}
